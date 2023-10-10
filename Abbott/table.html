@@ -1,3 +1,9 @@
+#set($projectId = $page.project)
+#set ($docId = $document.getId())
+#set ($spaceId = $document.getModuleFolder())
+#set ($qr = '"')
+
+
 
 <style>
 td{
@@ -19,8 +25,13 @@ width:35%;
       </tr>
       <tr>
         <td class="y-header">4 - Life Threatening or Catastrophic</td>
-        <td style="background-color: yellow">0
-</td>
+        <td style="background-color: yellow">
+              
+            #set($query = "(type:sraRisk AND threatSeverity.KEY:1 AND exploitLikelhood_post.KEY:1) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+            $wiCount.size()
+        </td>
         <td style="background-color: blueviolet">0</td>
         <td style="background-color: blueviolet">0</td>
         <td style="background-color: blueviolet">0</td>
