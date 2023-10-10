@@ -26,48 +26,153 @@ width:35%;
       <tr>
         <td class="y-header">4 - Life Threatening or Catastrophic</td>
         <td style="background-color: yellow">
-              
-            #set($query = "(type:sraRisk AND threatSeverity.KEY:1 AND exploitLikelhood_post.KEY:1) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              #set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
               
             #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
             $wiCount.size()
+            
         </td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()
+</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()
+</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()
+</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()
+</td>
       </tr>
       <tr>
         <td class="y-header">3 - Severe or Critical</td>
-        <td style="background-color: yellow">10</td>
-        <td style="background-color: yellow">5</td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
+        <td style="background-color: yellow">
+#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()
+</td>
+        <td style="background-color: yellow">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
       </tr>
       <tr>
         <td class="y-header">2 - Moderate to Serious</td>
-        <td style="background-color: lightgreen">3</td>
-        <td style="background-color: yellow">2</td>
-        <td style="background-color: yellow">4</td>
-        <td style="background-color: blueviolet">0</td>
-        <td style="background-color: blueviolet">0</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: yellow">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: yellow">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
       </tr>
       <tr>
         <td class="y-header">1 - Limited or Minor</td>
-        <td style="background-color: lightgreen">10</td>
-        <td style="background-color: lightgreen">20</td>
-        <td style="background-color: yellow">6</td>
-        <td style="background-color: yellow">2</td>
-        <td style="background-color: blueviolet">0</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: yellow">
+
+#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: yellow">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: blueviolet">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
       </tr>
       <tr>
         <td class="y-header">0 - None</td>
-        <td style="background-color: lightgreen">30</td>
-        <td style="background-color: lightgreen">5</td>
-        <td style="background-color: lightgreen">10</td>
-        <td style="background-color: lightgreen">8</td>
-        <td style="background-color: yellow">0</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: lightgreen">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
+        <td style="background-color: yellow">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            $wiCount.size()</td>
       </tr>
     </table>
 </div>
