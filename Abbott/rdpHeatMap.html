@@ -1,401 +1,206 @@
-#set($projectId = $page.project) #set ($docId = $document.getId()) #set
-($spaceId = $document.getModuleFolder()) #set ($qr = '"')
+#set($projectId = $page.project)
+#set ($docId = $document.getId())
+#set ($spaceId = $document.getModuleFolder())
+#set ($qr = '"')
+
+
 
 <style>
-  td {
-    text-align: center;
-  }
-  .y-header {
-    width: 35%;
-  }
-  a {
-    color: black !important;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  a:hover {
-    cursor: pointer;
-  }
+td{
+text-align:center;
+}
+.y-header{
+width:35%;
+}
+a{
+color: black !important;
+font-weight:bold;
+text-decoration: none;
+}
+a:hover{
+cursor:pointer;
+}
 </style>
-{pre}
-<div style="width: 100%">
-  <table border="1" style="width: 100%">
-    <tr>
-      <th class="y-header">
-        <p>P<sub>overall</sub></p>
-        <p>S</p>
-      </th>
-      <th>0</th>
-      <th>1</th>
-      <th>2</th>
-      <th>3</th>
-      <th>4</th>
-    </tr>
-    <tr>
-      <td class="y-header">4 - Life Threatening or Catastrophic</td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
-        Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
-        Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+<div style="width:100%">
+<table border=1 style="width:100%">
+      <tr>
+        <th class="y-header"><p>P<sub>overall</sub></p><p>S</p></th>
+        <th>0</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+      </tr>
+      <tr>
+        <td class="y-header">4 - Life Threatening or Catastrophic</td>
+        <td style="background-color: #fffc04" >
+              #set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:0OccAIMD ) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
-        Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+          <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+            
+        </td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
-        Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+           <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
-        Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td class="y-header">3 - Severe or Critical</td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
-        Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
-        Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">3 - Severe or Critical</td>
+        <td style="background-color: #fffc04">
+#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
-        Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+<a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
-        Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
-        Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td class="y-header">2 - Moderate to Serious</td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
-        Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
-        Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">2 - Moderate to Serious</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
-        Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
-        Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
-        Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td class="y-header">1 - Limited or Minor</td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
-        Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
-        Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">1 - Limited or Minor</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
-        Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
-        Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #7834a4">
-        #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
-        Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td class="y-header">0 - None</td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
-        Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
-        Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "(type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
-        Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">0 - None</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #98d454">
-        #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
-        Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-      <td style="background-color: #fffc04">
-        #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
-        Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
-        join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
-        '$projectId'))") #set($wiCount =
-        $trackerService.queryWorkItems("$query", "id"))
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
-        <a
-          target="_blank"
-          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
-    </tr>
-  </table>
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "(type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner join module mod on mod.c_uri=wi.fk_uri_module inner join project p on p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id = '$projectId'))")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+    </table>
 </div>
-{/pre}
