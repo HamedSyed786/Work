@@ -37,7 +37,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
         Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -51,7 +51,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
         Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -65,7 +65,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
         Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -79,7 +79,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
         Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -93,7 +93,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev4 AND
         Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -110,7 +110,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
         Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -124,7 +124,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
         Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -138,7 +138,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
         Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -152,7 +152,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
         Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -166,7 +166,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev3 AND
         Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -183,7 +183,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
         Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -197,7 +197,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
         Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -211,7 +211,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
         Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -225,7 +225,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
         Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -239,7 +239,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev2 AND
         Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -256,7 +256,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
         Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -270,7 +270,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
         Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -284,7 +284,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
         Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -298,7 +298,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
         Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -312,7 +312,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev1 AND
         Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -329,7 +329,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
         Poverall.KEY:0OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -343,7 +343,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
         Poverall.KEY:1OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -357,7 +357,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
         Poverall.KEY:2OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -371,7 +371,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
         Poverall.KEY:3OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
@@ -385,7 +385,7 @@
         #set($query = "(type:rr AND severityAHO.KEY:sev0 AND
         Poverall.KEY:4OccAIMD) AND (SQL:(select wi.c_pk from workitem wi inner
         join module mod on mod.c_uri=wi.fk_uri_module inner join project p on
-        p.c_uri=wi.fk_uri_project where mod.c_id='$document.id' and p.c_id =
+        p.c_uri=wi.fk_uri_project where mod.c_id='$docId' and p.c_id =
         '$projectId'))") #set($wiCount =
         $trackerService.queryWorkItems("$query", "id"))
 
