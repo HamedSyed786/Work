@@ -1,0 +1,184 @@
+##set($projectId = $page.project)
+#set($projectId = $document.getProjectId())
+#set ($docId = $document.getId())
+#set ($spaceId = $document.getModuleFolder())
+#set ($qr = '"')
+
+#set($projectQuery=$page.getReference().projectId())
+
+<style>
+td{
+text-align:center;
+}
+.y-header{
+width:35%;
+}
+a{
+color: black !important;
+font-weight:bold;
+text-decoration: none;
+}
+a:hover{
+cursor:pointer;
+}
+</style>
+
+<div style="width:100%">
+<table border=1 style="width:100%">
+      <tr>
+        <th class="y-header"><p>P<sub>overall</sub></p><p>S</p></th>
+        <th>0</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+      </tr>
+      <tr>
+        <td class="y-header">4 - Life Threatening or Catastrophic</td>
+        <td style="background-color: #fffc04" >
+              #set($query = "$page.project AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:0OccAIMD ")
+              
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+          <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+            
+        </td>
+        <td style="background-color: #7834a4">#set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:1OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+           <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:2OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:3OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:4OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">3 - Severe or Critical</td>
+        <td style="background-color: #fffc04">
+#set($query = "type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:0OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+<a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:1OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+            <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:2OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:3OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:4OccAIMD") 
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">2 - Moderate to Serious</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:0OccAIMD") 
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:1OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:2OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:3OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:4OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">1 - Limited or Minor</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:0OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:1OccAIMD") 
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">
+
+#set($query = "type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:2OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:3OccAIMD") 
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #7834a4">#set($query = "type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:4OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+      <tr>
+        <td class="y-header">0 - None</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:0OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:1OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:2OccAIMD") 
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #98d454">#set($query = "type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:3OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+        <td style="background-color: #fffc04">#set($query = "type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:4OccAIMD")
+            #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+             <a target="_blank" href= "https://polarion-meddev-training.oneabbott.com/polarion/#/project/Requirements/workitems?query=${query}">$wiCount.size()</a>
+</td>
+      </tr>
+    </table>
+</div>
+        
