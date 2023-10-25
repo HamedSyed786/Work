@@ -190,16 +190,18 @@ false
 		#end
        ## $fmeaLinkedItems.size()
         ##if( $definedSet.contains($fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()))
-        #set($models=[])
+        ##set($models=[])
         #foreach($fmeaLinkedItem in $fmeaLinkedItems)
         		#set($models=$fmeaLinkedItem.getCustomField("models"))
                 #foreach($model in $models)
                 		#if($definedSet.contains($model.getId()))
-                        		#set($count=$count+1)  #break
+                        		#set($count=$count+1)  
+                                #break
                         #end
+                        
                 #end
         #end
-           $count
+           
            #if($count>0)
                 <a
           target="_blank"
