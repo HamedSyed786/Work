@@ -1,0 +1,924 @@
+##set($projectId = $page.project) #set($projectId = $document.getProjectId())
+#set ($docId = $document.getId()) #set ($spaceId = $document.getModuleFolder())
+#set ($qr = '"') 
+#set($projectQuery=$page.getReference().projectId())
+
+##Parameters Ids and query needed
+################
+##set($help="AND BUDIgrouping.KEY:drgTherapy AND therapyType.KEY:dbs AND groupingsRisk.KEY:NTRFC AND generation.KEY:eterna")
+##generation
+##groupingsRisk
+##therapyType
+##BUDIgrouping
+##modelNumbers
+#################
+
+##identifiers assignment
+#set($BUDIgrouping=$pageParameters.BUDIgrouping)
+#set($generation=$pageParameters.generation)
+#set($groupingsRisk=$pageParameters.groupingsRisk)
+#set($therapyType=$pageParameters.therapyType)
+#set($modelNumbers=$pageParameters.modelNumbers.values())
+#set($modelNumbers1=$pageParameters.modelNumbers.toLucene())
+$modelNumbers1
+#set($params="")
+#set($BudiParam="")
+#set($generationParam="")
+#set($groupingParam="")
+#set($therapyParam="")
+#set($modelParam="")
+
+##############################
+##model no.s logic building dev
+
+##help : linkedWorkItems:Requirements/REQ-44115 AND models.KEY:modelNumber391
+
+##set($linkItems=$trackerService.queryWorkItems("project.id:$projectQuery AND type:rr", "id").get(1).getLinkedWorkItems().get(0).getCustomField("models"))
+##set($fmea=$trackerService.queryWorkItems("project.id:$projectQuery AND type:fmecaOrUERA AND models.KEY:modelNumber391","id"))
+##Fmea links : $fmea.get(0).getLinkedWorkItems().size()
+#set($workItems= $trackerService.queryWorkItems("project.id:$projectQuery AND type:rr", "id"))
+#set($linkedItems=$workItems.get(0).getLinkedWorkItems())
+
+##WorkItems: $workItems.size()
+<br>
+##linkedItems: $linkedItems.size()
+
+### checking fmea links
+#set($fmeaLinkedItems=[])
+#foreach($linkedItem in $linkedItems)
+	#if($linkedItem.getType().getId() == "fmecaOrUERA")
+    #set($result=$fmeaLinkedItems.add($linkedItem))
+	#end
+#end
+
+<br>
+##$fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()
+
+#set($linkedModelNumbers=[])
+#foreach($fmeaLinkedItem in $fmeaLinkedItems)
+	#if(!$fmeaLinkedItem.getCustomField("models").isEmpty())
+    #set($result=$linkedModelNumbers.add($fmeaLinkedItem.getCustomField("models")))
+    
+	#end
+#end
+##$linkedModelNumbers
+<br>
+#set($modelNumberArr=[])
+#foreach($modelNumbersList in $linkedModelNumbers)
+	#foreach($modelNumber in $modelNumbersList)
+	#set($result=$modelNumberArr.add($modelNumber))
+    #end
+#end
+
+#set($userSet=[])
+#set($definedSet=[])
+#foreach($modelNumber in $modelNumberArr)
+	#set($result=$userSet.add($modelNumber.id))
+#end
+#foreach($modelNumber in $modelNumbers)
+	#set($result=$definedSet.add($modelNumber.id))
+#end
+##$userSet
+<br>
+##$definedSet
+<br>
+#*
+#if( $definedSet.contains($fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()))
+true
+#else
+false
+#end
+*#
+##foreach($item in $linkItems)
+##Link Item: $item.id
+##end
+##<br>
+##Model: $modelNumbers
+<br>
+##$modelNumbers
+#*
+#foreach($modelNumberParam in $modelNumbers)
+	if($modelNumberArr.contains($modelNumberParam))
+    true
+    #end
+#end
+*#
+<br>
+
+###############################################################################
+##initialization of appending query based on parameters selected
+#######################################################################################
+#if($BUDIgrouping.singleValue || $generation.singleValue || $groupingsRisk.singleValue || $therapyType.singleValue )
+	#if($BUDIgrouping.singleValue)
+    		#set($BudiParam="AND BUDIgrouping.KEY:$BUDIgrouping.singleValue.id")
+     #end
+     	#if($generation.singleValue)
+    		#set($generationParam="AND generation.KEY:$generation.singleValue.id")
+     #end
+     	#if($groupingsRisk.singleValue)
+    		#set($groupingParam="AND groupingsRisk.KEY:$groupingsRisk.singleValue.id")
+     #end
+     	#if($therapyType.singleValue)
+    		#set($therapyParam="AND therapyType.KEY:$therapyType.singleValue.id")
+     #end
+	#set($values=[$BUDIgrouping.singleValue.id, $generation.singleValue.id, $groupingsRisk.singleValue.id, $therapyType.singleValue.id ])
+	##Initial Array: $values
+	##set($params="AND BUDIgrouping.KEY:$BUDIgrouping.singleValue.id AND therapyType.KEY:$therapyType.singleValue.id AND groupingsRisk.KEY:$groupingsRisk.singleValue.id AND generation.KEY:$generation.singleValue.id ")
+    #set($params=" $BudiParam $generationParam $groupingParam $therapyParam")
+	##<br>
+	##Query: $params
+#end   
+######################################################################
+
+##styling page tags
+###############################
+<style>
+  td {
+    text-align: center;
+  }
+  .y-header {
+    width: 35%;
+  }
+  a {
+    color: black !important;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  a:hover {
+    cursor: pointer;
+  }
+</style>
+###############################
+
+
+##RPD Heat Map Dynamic Table Structure 
+##################################################################
+<div style="width: 100%">
+  <table border="1" style="width: 100%">
+    <tr>
+      <th class="y-header">
+        <p>P<sub>overall</sub></p>
+        <p>S</p>
+      </th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+    <tr>
+      <td class="y-header">4 - Life Threatening or Catastrophic</td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:0OccAIMD $params")
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+          #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:1OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+        
+         #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:2OccAIMD $params") 
+        #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:3OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+         #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:4OccAIMD $params") 
+        #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
+
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size()</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td class="y-header">3 - Severe or Critical</td>
+      
+      <td style="background-color: #fffc04">
+      ## linkedWorkItems:REQ\-44115 AND (models.KEY:modelNumber391)
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:0OccAIMD $params") 
+        #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
+        #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+   </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:1OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+          #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:2OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+         #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:3OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+
+          #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND  severityAHO.KEY:sev3 AND Poverall.KEY:4OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+    </tr>
+    <tr>
+      <td class="y-header">2 - Moderate to Serious</td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:0OccAIMD $params")  
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:1OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:2OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:3OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:4OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+    </tr>
+    <tr>
+      <td class="y-header">1 - Limited or Minor</td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:0OccAIMD $params")
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:1OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:2OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:3OccAIMD $params") 
+        #set($wiCount =  $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #7834a4">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:4OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+    </tr>
+    <tr>
+      <td class="y-header">0 - None</td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:0OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:1OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:2OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #98d454">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:3OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+      <td style="background-color: #fffc04">
+        #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:4OccAIMD $params") 
+        #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+  #set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+          #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        #set($workitemsWithModels =$trackerService.queryWorkItems("$query", "id"))
+        ##$wiCount1.size() 
+       #if($workitemsWithModels.size() > 0)
+      
+      #set( $count = $count + 1)
+       
+       #end
+      
+      
+          #end
+          ##$count
+          #if($count > 0)
+        <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$count </a > 
+          #else
+           <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+         #end
+      </td>
+    </tr>
+  </table>
+</div>
+##################################################################################
+<br>
