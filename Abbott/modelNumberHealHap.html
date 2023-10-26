@@ -19,6 +19,7 @@
 #set($groupingsRisk=$pageParameters.groupingsRisk)
 #set($therapyType=$pageParameters.therapyType)
 #set($modelNumbers=$pageParameters.modelNumbers.values())
+#set($modelNumbers1=$pageParameters.modelNumbers.toLucene())
 #set($params="")
 #set($BudiParam="")
 #set($generationParam="")
@@ -38,7 +39,7 @@
 #set($linkedItems=$workItems.get(0).getLinkedWorkItems())
 
 ##WorkItems: $workItems.size()
-<br>
+
 ##linkedItems: $linkedItems.size()
 
 ### checking fmea links
@@ -49,7 +50,6 @@
 	#end
 #end
 
-<br>
 ##$fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()
 
 #set($linkedModelNumbers=[])
@@ -60,7 +60,7 @@
 	#end
 #end
 ##$linkedModelNumbers
-<br>
+
 #set($modelNumberArr=[])
 #foreach($modelNumbersList in $linkedModelNumbers)
 	#foreach($modelNumber in $modelNumbersList)
@@ -70,6 +70,7 @@
 
 #set($userSet=[])
 #set($definedSet=[])
+
 #foreach($modelNumber in $modelNumberArr)
 	#set($result=$userSet.add($modelNumber.id))
 #end
@@ -77,9 +78,9 @@
 	#set($result=$definedSet.add($modelNumber.id))
 #end
 ##$userSet
-<br>
+
 ##$definedSet
-<br>
+
 #*
 #if( $definedSet.contains($fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()))
 true
@@ -90,9 +91,9 @@ false
 ##foreach($item in $linkItems)
 ##Link Item: $item.id
 ##end
-##<br>
+##
 ##Model: $modelNumbers
-<br>
+
 ##$modelNumbers
 #*
 #foreach($modelNumberParam in $modelNumbers)
@@ -101,7 +102,7 @@ false
     #end
 #end
 *#
-<br>
+
 
 ###############################################################################
 ##initialization of appending query based on parameters selected
@@ -123,7 +124,7 @@ false
 	##Initial Array: $values
 	##set($params="AND BUDIgrouping.KEY:$BUDIgrouping.singleValue.id AND therapyType.KEY:$therapyType.singleValue.id AND groupingsRisk.KEY:$groupingsRisk.singleValue.id AND generation.KEY:$generation.singleValue.id ")
     #set($params=" $BudiParam $generationParam $groupingParam $therapyParam")
-	##<br>
+	
 	##Query: $params
 #end   
 ######################################################################
@@ -151,6 +152,8 @@ false
 
 ##RPD Heat Map Dynamic Table Structure 
 ##################################################################
+#set($count = 0)
+ #set($matchedModels = -1 )
 <div style="width: 100%">
   <table border="1" style="width: 100%">
     <tr>
@@ -169,133 +172,387 @@ false
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:0OccAIMD $params")
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
+         
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:1OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
         
-        ##model numbers logic
-        #set($count=0)
-		#set($linkedItems=$wiCount.get(0).getLinkedWorkItems())
-        #set($fmeaLinkedItems=[])
-		#foreach($linkedItem in $linkedItems)
-			#if($linkedItem.getType().getId() == "fmecaOrUERA")
-   	 		#set($result=$fmeaLinkedItems.add($linkedItem))
-			#end
-		#end
-       ## $fmeaLinkedItems.size()
-        ##if( $definedSet.contains($fmeaLinkedItems.get(0).getCustomField("models").get(0).getId()))
-        ##set($models=[])
-        #foreach($fmeaLinkedItem in $fmeaLinkedItems)
-        		#set($models=$fmeaLinkedItem.getCustomField("models"))
-                #foreach($model in $models)
-                		#if($definedSet.contains($model.getId()))
-                        		#set($count=$count+1)  
-                                #break
-                        #end
-                        
-                #end
-        #end
-           
-           #if($count>0)
-                <a
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
+        <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >count: $count</a>
+          >$count </a > 
           #else
           <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >normal: $wiCount.size()</a>
-          #end
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:2OccAIMD $params") 
         #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:3OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev4 AND Poverall.KEY:4OccAIMD $params") 
         #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
-
+        
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
     </tr>
     <tr>
       <td class="y-header">3 - Severe or Critical</td>
+      
       <td style="background-color: #fffc04">
+      ## linkedWorkItems:REQ\-44115 AND (models.KEY:modelNumber391)
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:0OccAIMD $params") 
         #set($wiCount =$trackerService.queryWorkItems("$query", "id"))
-
+        
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+         
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
-      </td>
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
+   </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:1OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:2OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev3 AND Poverall.KEY:3OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND  severityAHO.KEY:sev3 AND Poverall.KEY:4OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+ 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
     </tr>
     <tr>
@@ -303,52 +560,192 @@ false
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:0OccAIMD $params")  
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+ 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:1OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:2OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:3OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev2 AND Poverall.KEY:4OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
     </tr>
     <tr>
@@ -356,52 +753,192 @@ false
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:0OccAIMD $params")
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+ 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:1OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+ 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:2OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+ 
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:3OccAIMD $params") 
         #set($wiCount =  $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #7834a4">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev1 AND Poverall.KEY:4OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
     </tr>
     <tr>
@@ -409,55 +946,193 @@ false
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:0OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:1OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:2OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #98d454">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:3OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
       <td style="background-color: #fffc04">
         #set($query = "project.id:$projectQuery AND type:rr AND severityAHO.KEY:sev0 AND Poverall.KEY:4OccAIMD $params") 
         #set($wiCount = $trackerService.queryWorkItems("$query", "id"))
-
+  
+         ##set($count = 0)
+          #foreach($wi in $wiCount)
+        ##  $wi.getId()
+         		 #set($query = "project.id:$projectQuery AND linkedWorkItems:$wi.getId() AND ( models.KEY:$modelNumbers1)") 
+        		#set($workitemsWithModels =$trackerService.queryWorkItems($query, "id"))
+        ##$wiCount1.size() 
+        		#set($matchedModels = $workitemsWithModels.size())
+      			 #if($matchedModels > 0)
+    		  	#set( $count = $count + 1)
+       			 #end
+         	 #end
+          
+          ##$count
+     #if($definedSet.size() > 0)     
+          #if($count > 0 && $matchedModels != -1 )
         <a
           target="_blank"
           href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
-          >$wiCount.size()</a
-        >
+          >$count </a > 
+          #else
+          <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >0 </a > 
+         #end
+       #else
+       <a
+          target="_blank"
+          href="https://polarion-meddev-training.oneabbott.com/polarion/#/project/$projectQuery/workitems?query=${query}"
+          >$wiCount.size() </a >  
+       #end
+       #set($count = 0)
+       #set($matchedModels = -1)
       </td>
     </tr>
   </table>
 </div>
-##################################################################################
-<br>
