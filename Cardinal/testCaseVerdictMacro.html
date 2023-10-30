@@ -1,0 +1,8 @@
+{includeForm:/macros.testRunMacros}
+#set ($testRunName = $request.getParameter("testRunName") )
+
+#if ($testRunName)
+
+#showFullTestRun($testRunName)
+
+#end
