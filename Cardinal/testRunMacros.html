@@ -193,7 +193,18 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 #set ($rowsize = $tsResults.size() + 1)
 {pre}
 <table  cellpadding=5 align=left border=1>
-<tr><th width=6px>#</td><th width=80px>Result</th><td rowspan=$rowsize width=700px>$testRecord.getTestCaseWithRevision().getDescription().getContent()</td><th>Actual Results</th></tr>
+<tr>
+	<th width=6px>#</th>
+	<th width=80px>Result</th>
+	<td rowspan=$rowsize width=700px>
+		#if($testRecord.getTestCaseWithRevision().getDescription().getContent())
+		$testRecord.getTestCaseWithRevision().getDescription().getContent()
+		#else
+		N/A
+		#end
+	</td>
+	<th>Actual Results</th>
+</tr>
 
 
 ## TS size: $tsResults.size()
@@ -232,7 +243,12 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 </td>
 ##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
 ##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
-<td>#if ($tsResult.getComment().getContent())   $tsResult.getComment().getContent() #else ~~No Tester Comments~~ #end</td>
+<td>
+	#if ($tsResult.getComment().getContent())   
+	$tsResult.getComment().getContent() 
+	#else ~~No Tester Comments~~ 
+	#end
+</td>
 </tr>
 
 
