@@ -1,0 +1,166 @@
+#if ($page.name == "eSigMacro")
+1.1 Electronic Signature UI 
+
+This page holds the JQuery/Javascript code necessary for the CFR 21 Part 11 eSignature for Tester/Reviewer Test Record Electronic Signatures.
+
+1.1.1 Documentation and Use
+
+This is not a velocity macro, but rather HTML code that is directly included in other wiki content.
+
+Wiki Pages calling this macro:
+
+/macros.testRunMacros
+
+Usage:
+
+{code}
+{includeForm:/macros.eSigMacro}
+{code}
+
+#else
+{pre}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script type='text/javascript'>var $j = jQuery.noConflict();</script>
+##<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" type="text/css" />
+
+
+
+##<script type="text/javascript" src="/polarion/wiki/custom/js/jquery-1.10.2.js"></script>
+##<script type="text/javascript" src="/polarion/wiki/custom/js/jquery-ui.js"></script>
+##<script type='text/javascript'>var $j = jQuery.noConflict();</script>
+##<link rel="stylesheet" href="/polarion/wiki/custom/css/jquery-ui.css" type="text/css" />
+<style>
+    body { font-size: 62.5%; }
+    label, input { display:block; }
+    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    fieldset { padding:0; border:0; margin-top:25px; }
+    h1 { font-size: 1.2em; margin: .6em 0; }
+    div#users-contain { width: 350px; margin: 20px 0; }
+    div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+    div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+    .ui-dialog .ui-state-error { padding: .3em; }
+    .validateTips { border: 1px solid transparent; padding: 0.3em; }
+</style>
+{/pre}
+{pre}
+<script>
+  $j(function() {
+    var dialog, form,
+      name = $j( "#xUser" ),
+      password = $j( "#xPwd" ),
+      tips = $j( ".validateTips" );
+ 
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+ function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	 //$j("#debug").text("Before If Statement");
+	 $j("#output321").text(xhttp.responseText);
+	 // $j("#debug").text(xhttp.responseText);
+	 if ( $j("#output321").text().trim() == "success" ) {
+	    // close dialog and process form
+	    // $j( "#apply-esig" ).hide();
+            $j("#reviewerForm").submit();
+            dialog.dialog( "close" ); 
+            // alert("Form should have been submitted");
+	 } else {
+            // remain in dialog unless canceled
+	    $j("#xUser").val("");
+	    $j("#xPwd").val("");
+	 } 
+    }
+  };
+ var data = $j("#eSigForm").serialize();
+ // Debug URL Header
+ // alert(data);
+ // $j("#debug").text(data);
+ xhttp.open("POST", "/polarion/covidienQuestionaire/", true);
+ xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ xhttp.send(data);
+} 
+    function addUser() {
+      var valid = true;
+      if ( valid ) {
+	loadDoc();
+      }
+      return valid;
+    }
+    dialog = $j( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 340,
+      width: 360,
+      modal: true,
+      closeOnEscape: true,
+      buttons: {
+        "Save": addUser
+      //  Cancel: function() {
+      //  dialog.dialog( "close" );
+      //  }
+      },
+      close: function() {
+       form[ 0 ].reset();
+      // allFields.removeClass( "ui-state-error" );
+      }
+    });
+    form = dialog.find( "#eSigForm" ).on( "submit", function( event ) {
+      event.preventDefault();
+      addUser();
+    })
+    $j( "#apply-esig" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+      $j("#output321").text(''); 
+      $j("#xUser").val(''); 
+      $j("#xPwd").val(''); 
+    });
+    $j('#xUser').on('focus',function(){
+             $j("#xUser").val(''); 
+    });
+    $j('#xPwd').on('focus',function(){
+             $j("#xPwd").val(''); 
+    });
+
+
+  function submitReviewerForm() {
+    var xhttpX = new XMLHttpRequest();
+    var dataX = $j("#reviewerForm").serialize();
+    // Debug URL Header
+    alert(dataX);
+    xhttpX.open("GET", "/polarion/#/wiki/macros/eSigSubmit?"+ dataX, true);
+    xhttpX.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttpX.send();
+  };
+
+});
+</script>
+{/pre}
+<div id="dialog-form" title="Testing Electronic Signature">
+  <p>By providing your user name and password, you will provide an electronic signature.</p> 
+  <form id="eSigForm" autocomplete=off>
+    <fieldset>
+    <table cellpadding=4px>
+    <tr><td valign="bottom">User Name:</td><td><input type="text" name="xUser" id="xUser" autocomplete="off" value="" class="text ui-widget-content ui-corner-all"></td></tr>
+    <tr><td valign="bottom">Password:</td><td><input type="password" name="xPwd" id="xPwd" value="" class="text ui-widget-content ui-corner-all"></td></tr>
+      <input type="hidden" name="eSignVerify" id="eSignVerify" value="true" >
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+</table>
+  </form>
+  <p class="validateTips">All form fields are required.</p>
+  <br/>
+  <div id="output321" ></div>
+<br/>
+  <div id="debug"></div>
+</div>
+<button id="apply-esig">Apply eSignature</button>
+
+#end
