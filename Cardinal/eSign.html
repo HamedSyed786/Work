@@ -18,6 +18,24 @@ Usage:
 {code}
 
 #else
+
+<style>
+	#buttonParent{
+		width: 100%; 
+		display: flex; 
+		justify-content: center;
+	}
+	#apply-esig{
+		padding: 2rem; 
+		border:none; 
+		border-radius:10px; 
+		outline: none; 
+		width: 25%; 
+		font-size: 1.3rem; 
+		background-color: green; 
+		color: white;
+	}
+</style>
 {pre}
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -161,6 +179,8 @@ Usage:
 <br/>
   <div id="debug"></div>
 </div>
-<button id="apply-esig">Apply eSignature</button>
+<div style="" id="buttonParent">
+<button id="apply-esig" style="">Apply eSignature</button>
+</div>
 
 #end
