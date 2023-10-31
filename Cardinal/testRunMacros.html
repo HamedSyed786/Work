@@ -4,6 +4,13 @@
 		width: 100vw;
 		
 	}
+
+	.tcTable th{
+		height:200px;
+		text-align: center;
+		vertical-align: middle;
+		padding: 30px;
+	}
 	
 /* 	.tcTable tr:nth-child(2) td:nth-child(4){
 		background-color: yellow;
@@ -16,6 +23,7 @@
 	} */
 	.results{
 		width:2000px;
+		
 	}
 </style>
 
@@ -209,16 +217,19 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 	#set ($rowCounter = 0)
 	#set ($counter = 1)
 
-	<h3>Test Step Results for $testRecord.getTestCase().getId()</h3>
+	<h3 style="font-size: 3rem ">Test Step Results for $testRecord.getTestCase().getId()</h3>
 
 
 	#set ($rowsize = $tsResults.size() + 1)
 	
 	{pre}
-	<table border=1 class="tcTable" style="width: 80vw; text-align: center; vertical-align: middle;">
+	<table border=1 class="tcTable" style="width: 100%; text-align: center; vertical-align: middle;">
 		<tr>
-			<th>#</th>
-			<th>Result</th>
+			<th >#</th>
+			<th style="  height:20px;
+				text-align: center;
+				vertical-align: middle;
+				padding: 2px;">Result</th>
 			##<th rowspan=$rowsize width=700px>
 			<th >
 					
@@ -261,27 +272,39 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 		#end
 
 	<tr >
-		<td style="">$counter</td>
-		<td style="">
-			#if ($tsIcon != "")
+		<td style="text-align: center;
+				vertical-align: middle;
+				padding: 10px;">$counter</td>
+		<td style=" text-align: center;
+				vertical-align: middle;
+				padding: 10px;">
+<!-- 			#if ($tsIcon != "")
 				<img src="$tsIcon">  
 			#end
 			#if ($tsResultName != "")
 				*$!tsResultName*
+			#else -->
+			#if ($tsIcon != "" && $tsResultName != "")
+				<img src="$tsIcon" style="display: inline"> &nbsp; <span>$!tsResultName</span>
 			#else
-			<i>No step result</i>
+			##<i>No step result</i>
+			<span>No step result</span>
 			#end
 		</td>
 		##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
 		##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
 		<td style="border:none; text-align: center; 
  		 		vertical-align: middle;
+			
+				padding: 10px;
   				 "> 
 			#if($desc)
 				$description
 			#end
 		</td>
-		<td class="results" style=" text-align: left;">
+		<td class="results" style="text-align: center;
+				vertical-align: middle;
+				padding: 10px; text-align:left; width: auto">
 			<p>
 			#if ($tsResult.getComment().getContent())   
 				$tsResult.getComment().getContent() 
@@ -318,8 +341,13 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 	
 		#set ($_url = "/polarion/testrun-attachment/$page.project/$testRunName/$b" )
 	 
-		__Attachment for Test Step ${counter}__ : {pre} <a href="$_url" target="_blank"><b>$attachment.getFileName()</b></a> 
-{/pre}
+<!-- 		__Attachment for Test Step ${counter}__ : {pre} <a href="$_url" target="_blank"><b>$attachment.getFileName()</b></a>  -->
+		 {pre} 
+		
+			<span style="font-size:1.8rem;"> Attachment for Test Step ${counter} : &nbsp;</span>
+			<a href="$_url" target="_blank"><b>$attachment.getFileName()</b></a> 
+		
+		{/pre}
 
 		#if ($attachment.getFileName().contains(".jpg") || $attachment.getFileName().contains(".gif") || $attachment.getFileName().contains(".png") || $attachment.getFileName().contains(".bmp") )
 			##<img src="$_url" border=1 width=600 >
@@ -549,7 +577,7 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 #set ($rowCounter = 0)
 #set ($counter = 1)
 
-<h3> Test Step Results for $testRecord.getTestCase().getId()</h3>
+<h1 style="font-size: 3rem"> Test Step Results for $testRecord.getTestCase().getId()</h1>
 
 #set ($rowsize = $tsResults.size() + 1)
 
