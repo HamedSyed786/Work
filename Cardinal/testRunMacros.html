@@ -1,3 +1,9 @@
+<style>
+	table{
+		text-align:center;
+	}
+</style>
+
 #if ($page.name == "testRunMacros")
 1.1 Test Run Macros Page
 
@@ -168,176 +174,199 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 
 #foreach ($testRecord in $sortedTestRecords)
 
-#set ($tcCounter = $tcCounter + 1)
+	#set ($tcCounter = $tcCounter + 1)
 
 
-#set ($testSteps = $testManagementService.getTestSteps($testRecord.getTestCase()).getSteps() )
+	#set ($testSteps = $testManagementService.getTestSteps($testRecord.getTestCase()).getSteps() )
 
-#foreach ($testStep in $testSteps)
+	#foreach ($testStep in $testSteps)
 
-#set ($columns = $testStep.getValues() )
+		#set ($columns = $testStep.getValues() )
 
-#end
-
-
-#getTCtableData( $testRecord)
-
-#set ($tsResults = $testRecord.getTestStepResults() )
-
-#set ($rowCounter = 0)
-#set ($counter = 1)
-
-<h3>Test Step Results for $testRecord.getTestCase().getId()</h3>
+	#end
 
 
-#set ($rowsize = $tsResults.size() + 1)
-{pre}
-<table  cellpadding=5 align=left border=1>
-<tr>
-	<th width=6px>#</th>
-	<th width=80px>Result</th>
-	<td rowspan=$rowsize width=700px>
-		#if($testRecord.getTestCaseWithRevision().getDescription().getContent())
-		$testRecord.getTestCaseWithRevision().getDescription().getContent()
+	#getTCtableData( $testRecord)
+
+	#set ($tsResults = $testRecord.getTestStepResults() )
+
+	#set ($rowCounter = 0)
+	#set ($counter = 1)
+
+	<h3>Test Step Results for $testRecord.getTestCase().getId()</h3>
+
+
+	#set ($rowsize = $tsResults.size() + 1)
+	{pre}
+	<table  cellpadding=5 align=left border=1>
+		<tr>
+			<th width=6px>#</th>
+			<th width=80px>Result</th>
+			<th rowspan=$rowsize width=700px>
+					
+				Description	
+				
+				
+					
+						#if($testRecord.getTestCaseWithRevision().getDescription().getContent())
+						$testRecord.getTestCaseWithRevision().getDescription().getContent()
+						#else
+						N/A
+						#end
+			
+		
+			</th>
+			<th>Actual Results</th>
+		</tr>
+
+
+	## TS size: $tsResults.size()
+
+
+		#foreach ($tsResult in $tsResults)
+		
+			## Row: $rowCounter
+			## Counter: $counter
+			
+			#if (! $tsResult.getResult() )
+			
+				#set ($tsIcon = $tsIconOld)
+				#set ($tsResultName = $tsResultOld)
+			
+			#else
+			
+			#set ($tsIconOld = $tsResult.getResult().getProperty("iconURL") )
+			#set ($tsResultOld = $tsResult.getResult().getName() )
+			#set ($tsIcon = $tsResult.getResult().getProperty("iconURL") )
+			#set ($tsResultName = $tsResult.getResult().getName() )
+		
+		#end
+
+	<tr>
+		<td>$counter</td>
+	<td>
+		#if ($tsIcon != "")
+			<img src="$tsIcon">  
+		#end
+		#if ($tsResultName != "")
+			*$!tsResultName*
 		#else
-		N/A
+		<i>No step result</i>
 		#end
 	</td>
-	<th>Actual Results</th>
-</tr>
+	##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
+	##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
+	
+	<td>
+		#if ($tsResult.getComment().getContent())   
+			$tsResult.getComment().getContent() 
+		#else 
+			~~No Tester Comments~~ 
+		#end
+	</td>
+	</tr>
 
 
-## TS size: $tsResults.size()
-
-
-#foreach ($tsResult in $tsResults)
-
-## Row: $rowCounter
-## Counter: $counter
-
-#if (! $tsResult.getResult() )
-
-#set ($tsIcon = $tsIconOld)
-#set ($tsResultName = $tsResultOld)
-
-#else
-
-#set ($tsIconOld = $tsResult.getResult().getProperty("iconURL") )
-#set ($tsResultOld = $tsResult.getResult().getName() )
-#set ($tsIcon = $tsResult.getResult().getProperty("iconURL") )
-#set ($tsResultName = $tsResult.getResult().getName() )
-
-#end
-
-<tr>
-<td>$counter</td>
-<td>
-#if ($tsIcon != "")
-<img src="$tsIcon">  
-#end
-#if ($tsResultName != "")
-*$!tsResultName*
-#else
-<i>No step result</i>
-#end
-</td>
-##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
-##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
-<td>
-	#if ($tsResult.getComment().getContent())   
-	$tsResult.getComment().getContent() 
-	#else ~~No Tester Comments~~ 
-	#end
-</td>
-</tr>
-
-
-#set ($counter = $counter + 1)
-#set ($rowCounter = $rowCounter + 1)
+	#set ($counter = $counter + 1)
+	#set ($rowCounter = $rowCounter + 1)
 
 #end
 </table>
+
+## table for final test reviewer verification
+	
 {/pre}
 
 #set ($counter = 0)
 
 #foreach ($tsResult in $tsResults)
 
-#set ($counter = $counter + 1)
+	#set ($counter = $counter + 1)
 
-#set ($tsAttachments = $tsResult.getAttachments() )
+	#set ($tsAttachments = $tsResult.getAttachments() )
 
-#foreach ($attachment in $tsAttachments)
-
-#set( $b = $$attachment.getFileName().replace(" ", "_") )
-
-
-#set ($_url = "/polarion/testrun-attachment/$page.project/$testRunName/$b" )
- 
-__Attachment for Test Step ${counter}__ : {pre} <a href="$_url" target="_blank"><b>$attachment.getFileName()</b></a> {/pre}
-
-#if ($attachment.getFileName().contains(".jpg") || $attachment.getFileName().contains(".gif") || $attachment.getFileName().contains(".png") || $attachment.getFileName().contains(".bmp") )
-##<img src="$_url" border=1 width=600 >
-#else 
-##info("This attachment cannot be embedded in this report.  Please download attachment and view locally")
-#end
-
-#end
-
-
-
-#end
-
-<br/><br/><br/>
-{pre}
-<table border=1 cellpadding=8 width=100% >
-<tr>
-<th colspan="6" align="center" >Original Test Case Results</th><th colspan="4" align="center">Test Reviewer Certification
-</th>
-</tr>
-<tr>
-<th>Test Case Id</th>
-<th>Result</th>
-<th>Test Title</th>
-<th>Comment</th>
-<th>Execution Date</th>
-<th>Executed By</th>
-<th>Test Reviewer Verdict</th>
-<th>Test Reviewer Comments</th>
-</tr>
-<tr>
-<td>
-<input type="hidden"  name="pId_$tcCounter" value="$testRecord.getTestCase().getId()" /> 
-<a href="/polarion/#/project/$page.project/workitem?id=$testRecord.getTestCase().getId()" target="_blank">$testRecord.getTestCase().getId()</a>
-</td>
-<td>
-<img src="$testRecord.getResult().getProperty("iconURL")"> $testRecord.getResult().getName()
-</td>
-<td>
-$testRecord.getTestCase().getTitle()</td><td>$!testRecord.getComment().convertToHTML().getContent()
-</td>
-<td>
-$testRecord.getExecuted()</td><td>$testRecord.getExecutedBy().getName()
-</td>
-<td>
-<select name="verdict_$tcCounter">
-<option value="Undefined">Undefined</option>
-<option value="Passed">Passed</option>
-<option value="Failed">Failed</option>
-</select>
-</td>
-<td>
-<textarea rows=4 cols=40 name="pComment_$tcCounter"  wrap=soft></textarea>
-</td>
-</tr>
-</table>
+	#foreach ($attachment in $tsAttachments)
+	
+		#set( $b = $$attachment.getFileName().replace(" ", "_") )
+	
+	
+		#set ($_url = "/polarion/testrun-attachment/$page.project/$testRunName/$b" )
+	 
+		__Attachment for Test Step ${counter}__ : {pre} <a href="$_url" target="_blank"><b>$attachment.getFileName()</b></a> 
 {/pre}
+
+		#if ($attachment.getFileName().contains(".jpg") || $attachment.getFileName().contains(".gif") || $attachment.getFileName().contains(".png") || $attachment.getFileName().contains(".bmp") )
+			##<img src="$_url" border=1 width=600 >
+		#else 
+			##info("This attachment cannot be embedded in this report.  Please download attachment and view locally")
+		#end
+
+	#end
+#end
+
 <br/>
+<br/>
+<br/>
+	
+{pre}
+
+<table border=1 cellpadding=8 width=100% >
+	<tr>
+		<th colspan="6" align="center" >Original Test Case Results</th><th colspan="4" align="center">
+			Test Reviewer Certification
+		</th>
+	</tr>
+	<tr>
+		<th>Test Case Id</th>
+		<th>Result</th>
+		<th>Test Title</th>
+		<th>Comment</th>
+		<th>Execution Date</th>
+		<th>Executed By</th>
+		<th>Test Reviewer Verdict</th>
+		<th>Test Reviewer Comments</th>
+	</tr>
+	<tr>
+		<td>
+		<input type="hidden"  name="pId_$tcCounter" value="$testRecord.getTestCase().getId()" /> 
+		<a href="/polarion/#/project/$page.project/workitem?id=$testRecord.getTestCase().getId()" target="_blank">$testRecord.getTestCase().getId()</a>
+		</td>
+		
+		<td>
+		<img src="$testRecord.getResult().getProperty("iconURL")"> $testRecord.getResult().getName()
+		</td>
+		
+		<td>
+		$testRecord.getTestCase().getTitle()</td><td>$!testRecord.getComment().convertToHTML().getContent()
+		</td>
+		
+		<td>
+		$testRecord.getExecuted()</td><td>$testRecord.getExecutedBy().getName()
+		</td>
+		
+		<td>
+			<select name="verdict_$tcCounter">
+				<option value="Undefined">Undefined</option>
+				<option value="Passed">Passed</option>
+				<option value="Failed">Failed</option>
+			</select>
+		</td>
+		
+		<td>
+		<textarea rows=4 cols=40 name="pComment_$tcCounter"  wrap=soft></textarea>
+		</td>
+	</tr>
+</table>
+	
+{/pre}
+	
+<br/>
+	
 #if ($testRecord.getTestCase().getLinkedWorkItemsBack().size() > 0)
-{section}
-{column:width=800px}
-<h3> Existing Deviations/Defects for $testRecord.getTestCase().getId()</h3>
-{workitems:type:(deviation defect) AND project.id:$page.project AND linkedWorkItems:$testRecord.getTestCase().getId()|fields=id,type,title,status}
+	{section}
+	{column:width=800px}
+	<h3> Existing Deviations/Defects for $testRecord.getTestCase().getId()</h3>
+	{workitems:type:(deviation defect) AND project.id:$page.project AND linkedWorkItems:$testRecord.getTestCase().getId()|fields=id,type,title,status}
 #end
 {column}
 {section}
@@ -346,6 +375,7 @@ $testRecord.getExecuted()</td><td>$testRecord.getExecutedBy().getName()
 <input type="hidden"  name="counter" value="$tcCounter" /> 
 <input type="hidden"  name="testRunName" value="$testRunName" /> 
 <input type="submit" name="post" value="Apply" tabindex="-1" style="position:absolute; top:-1000px" />
+	
 </form>
 {includeForm:/macros.eSigMacro}
 </div>
