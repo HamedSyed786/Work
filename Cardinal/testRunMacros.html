@@ -1,6 +1,21 @@
 <style>
-	table{
+	.tcTable{
 		text-align:center;
+		width: 100vw;
+		
+	}
+	
+/* 	.tcTable tr:nth-child(2) td:nth-child(4){
+		background-color: yellow;
+		width:2000px;
+	} */
+	
+/* 	.tcTable tr:nth-child(2) .results{
+		background-color: yellow;
+		width:2000px;
+	} */
+	.results{
+		width:2000px;
 	}
 </style>
 
@@ -171,8 +186,9 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 <form method="post" id="reviewerForm"  enctype="application/x-www-form-urlencoded" >
 
 #set ($tcCounter = 0)
-
 #foreach ($testRecord in $sortedTestRecords)
+#set($desc=true)
+#set($description="")
 
 	#set ($tcCounter = $tcCounter + 1)
 
@@ -197,21 +213,23 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 
 
 	#set ($rowsize = $tsResults.size() + 1)
+	
 	{pre}
-	<table  cellpadding=5 align=left border=1>
+	<table border=1 class="tcTable" style="width: 80vw; text-align: center; vertical-align: middle;">
 		<tr>
-			<th width=6px>#</th>
-			<th width=80px>Result</th>
-			<th rowspan=$rowsize width=700px>
+			<th>#</th>
+			<th>Result</th>
+			##<th rowspan=$rowsize width=700px>
+			<th >
 					
 				Description	
 				
 				
 					
 						#if($testRecord.getTestCaseWithRevision().getDescription().getContent())
-						$testRecord.getTestCaseWithRevision().getDescription().getContent()
+							#set($description=$testRecord.getTestCaseWithRevision().getDescription().getContent())
 						#else
-						N/A
+							#set($description="N/A")
 						#end
 			
 		
@@ -242,34 +260,42 @@ Certification Notes:|{testrun-property:$testRunName|certificationNotes}
 		
 		#end
 
-	<tr>
-		<td>$counter</td>
-	<td>
-		#if ($tsIcon != "")
-			<img src="$tsIcon">  
-		#end
-		#if ($tsResultName != "")
-			*$!tsResultName*
-		#else
-		<i>No step result</i>
-		#end
-	</td>
-	##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
-	##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
-	
-	<td>
-		#if ($tsResult.getComment().getContent())   
-			$tsResult.getComment().getContent() 
-		#else 
-			~~No Tester Comments~~ 
-		#end
-	</td>
+	<tr >
+		<td style="">$counter</td>
+		<td style="">
+			#if ($tsIcon != "")
+				<img src="$tsIcon">  
+			#end
+			#if ($tsResultName != "")
+				*$!tsResultName*
+			#else
+			<i>No step result</i>
+			#end
+		</td>
+		##<td>$testSteps.get($rowCounter).getValues().get(0).getContent()</td>
+		##<td>$testSteps.get($rowCounter).getValues().get(1).getContent()</td>
+		<td style="border:none; text-align: center; 
+ 		 		vertical-align: middle;
+  				 "> 
+			#if($desc)
+				$description
+			#end
+		</td>
+		<td class="results" style=" text-align: left;">
+			<p>
+			#if ($tsResult.getComment().getContent())   
+				$tsResult.getComment().getContent() 
+			#else 
+				~~No Tester Comments~~ 
+			#end
+			</p>
+		</td>
 	</tr>
 
+	#set($desc=false)
 
 	#set ($counter = $counter + 1)
 	#set ($rowCounter = $rowCounter + 1)
-
 #end
 </table>
 
