@@ -62,125 +62,149 @@ Usage:
     .validateTips { border: 1px solid transparent; padding: 0.3em; }
 </style>
 {/pre}
+
+
 {pre}
 <script>
-  $j(function() {
-    var dialog, form,
-      name = $j( "#xUser" ),
-      password = $j( "#xPwd" ),
-      tips = $j( ".validateTips" );
- 
-    function updateTips( t ) {
-      tips
-        .text( t )
-        .addClass( "ui-state-highlight" );
-      setTimeout(function() {
-        tips.removeClass( "ui-state-highlight", 1500 );
-      }, 500 );
-    }
- function loadDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-	 //$j("#debug").text("Before If Statement");
-	 $j("#output321").text(xhttp.responseText);
-	 // $j("#debug").text(xhttp.responseText);
-	 if ( $j("#output321").text().trim() == "success" ) {
-	    // close dialog and process form
-	    // $j( "#apply-esig" ).hide();
-            $j("#reviewerForm").submit();
-            dialog.dialog( "close" ); 
-            // alert("Form should have been submitted");
-	 } else {
-            // remain in dialog unless canceled
-	    $j("#xUser").val("");
-	    $j("#xPwd").val("");
-	 } 
-    }
-  };
- var data = $j("#eSigForm").serialize();
- // Debug URL Header
- // alert(data);
- // $j("#debug").text(data);
- xhttp.open("POST", "/polarion/covidienQuestionaire/", true);
- xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
- xhttp.send(data);
-} 
-    function addUser() {
-      var valid = true;
-      if ( valid ) {
-	loadDoc();
-      }
-      return valid;
-    }
-    dialog = $j( "#dialog-form" ).dialog({
-      autoOpen: false,
-      height: 340,
-      width: 360,
-      modal: true,
-      closeOnEscape: true,
-      buttons: {
-        "Save": addUser
-      //  Cancel: function() {
-      //  dialog.dialog( "close" );
-      //  }
-      },
-      close: function() {
-       form[ 0 ].reset();
-      // allFields.removeClass( "ui-state-error" );
-      }
-    });
-    form = dialog.find( "#eSigForm" ).on( "submit", function( event ) {
-      event.preventDefault();
-      addUser();
-    })
-    $j( "#apply-esig" ).button().on( "click", function() {
-      dialog.dialog( "open" );
-      $j("#output321").text(''); 
-      $j("#xUser").val(''); 
-      $j("#xPwd").val(''); 
-    });
-    $j('#xUser').on('focus',function(){
-             $j("#xUser").val(''); 
-    });
-    $j('#xPwd').on('focus',function(){
-             $j("#xPwd").val(''); 
-    });
+	
+$j(function() {
+
+	  
+	var dialog, form,
+	name = $j( "#xUser" ),
+	password = $j( "#xPwd" ),
+	tips = $j( ".validateTips" );
 
 
-  function submitReviewerForm() {
-    var xhttpX = new XMLHttpRequest();
-    var dataX = $j("#reviewerForm").serialize();
-    // Debug URL Header
-    alert(dataX);
-    xhttpX.open("GET", "/polarion/#/wiki/macros/eSigSubmit?"+ dataX, true);
-    xhttpX.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttpX.send();
-  };
+	  
+	function updateTips( t ) {
+	      tips
+	        .text( t )
+	        .addClass( "ui-state-highlight" );
+	      setTimeout(function() {
+	        tips.removeClass( "ui-state-highlight", 1500 );
+	      }, 500 );
+	}
 
+	  
+	 function loadDoc() {
+	  	var xhttp = new XMLHttpRequest();
+	  	xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+			 	//$j("#debug").text("Before If Statement");
+				 $j("#output321").text(xhttp.responseText);
+				 // $j("#debug").text(xhttp.responseText);
+			 	if ( $j("#output321").text().trim() == "success" ) {
+				    // close dialog and process form
+				    // $j( "#apply-esig" ).hide();
+				    $j("#reviewerForm").submit();
+				    dialog.dialog( "close" ); 
+				    // alert("Form should have been submitted");
+				 } else {
+			            // remain in dialog unless canceled
+				    $j("#xUser").val("");
+				    $j("#xPwd").val("");
+				 } 
+		   	 }
+	  };
+
+		 
+ 	var data = $j("#eSigForm").serialize();
+ 	// Debug URL Header
+ 	// alert(data);
+ 	// $j("#debug").text(data);
+ 	xhttp.open("POST", "/polarion/covidienQuestionaire/", true);
+ 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ 	xhttp.send(data);
+	} 
+
+	  
+	function addUser() {
+		var valid = true;
+		if ( valid ) {
+			loadDoc();
+		}
+		return valid;
+	}
+	
+	dialog = $j( "#dialog-form" ).dialog({
+		autoOpen: false,
+		height: 340,
+		width: 360,
+		modal: true,
+		closeOnEscape: true,
+		buttons: {
+		"Save": addUser
+		//  Cancel: function() {
+		//  dialog.dialog( "close" );
+		//  }
+			},
+		close: function() {
+		form[ 0 ].reset();
+		// allFields.removeClass( "ui-state-error" );
+		}
+	});
+	
+	form = dialog.find( "#eSigForm" ).on( "submit", function( event ) {
+		event.preventDefault();
+		addUser();
+	})
+	
+	$j( "#apply-esig" ).button().on( "click", function() {
+		dialog.dialog( "open" );
+		$j("#output321").text(''); 
+		$j("#xUser").val(''); 
+		$j("#xPwd").val(''); 
+	});
+			
+	$j('#xUser').on('focus',function(){
+	     $j("#xUser").val(''); 
+	});
+	
+	$j('#xPwd').on('focus',function(){
+	     $j("#xPwd").val(''); 
+	});
+
+
+	function submitReviewerForm() {
+		var xhttpX = new XMLHttpRequest();
+		var dataX = $j("#reviewerForm").serialize();
+		// Debug URL Header
+		alert(dataX);
+		xhttpX.open("GET", "/polarion/#/wiki/macros/eSigSubmit?"+ dataX, true);
+		xhttpX.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhttpX.send();
+	};
 });
+	
 </script>
 {/pre}
+
+
 <div id="dialog-form" title="Testing Electronic Signature">
   <p>By providing your user name and password, you will provide an electronic signature.</p> 
   <form id="eSigForm" autocomplete=off>
-    <fieldset>
-    <table cellpadding=4px>
-    <tr><td valign="bottom">User Name:</td><td><input type="text" name="xUser" id="xUser" autocomplete="off" value="" class="text ui-widget-content ui-corner-all"></td></tr>
-    <tr><td valign="bottom">Password:</td><td><input type="password" name="xPwd" id="xPwd" value="" class="text ui-widget-content ui-corner-all"></td></tr>
-      <input type="hidden" name="eSignVerify" id="eSignVerify" value="true" >
-      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-    </fieldset>
-</table>
+   	 <fieldset>
+    		<table cellpadding=4px>
+		    <tr>
+			    <td valign="bottom">User Name:</td><td><input type="text" name="xUser" id="xUser" autocomplete="off" value="" class="text ui-widget-content ui-corner-all"></td>
+		    </tr>
+		    <tr>
+			    <td valign="bottom">Password:</td><td><input type="password" name="xPwd" id="xPwd" value="" class="text ui-widget-content ui-corner-all"></td>
+		    </tr>
+		      <input type="hidden" name="eSignVerify" id="eSignVerify" value="true" >
+		      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</table>
+	</fieldset>
   </form>
   <p class="validateTips">All form fields are required.</p>
   <br/>
   <div id="output321" ></div>
-<br/>
+	<br/>
   <div id="debug"></div>
 </div>
 <div style="" id="buttonParent">
-<button id="apply-esig" style="">Apply eSignature</button>
+	<button id="apply-esig" style="">Apply eSignature</button>
 </div>
 
 #end
